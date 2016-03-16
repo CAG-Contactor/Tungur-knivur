@@ -9,4 +9,8 @@ Egenskap: kunder ska kunna ta ut pengar
     Så har kunden fått ut 1000kr
 
 
-
+  Scenario: kund försöker ta ut med än maxgränsen för ett uttag
+    Givet att bankomaten är full
+    När kunden loggar in med kontonummer 9898989L och pinkod 9898
+    När kunden tar ut 6000kr
+    Så nekas kunden uttag
