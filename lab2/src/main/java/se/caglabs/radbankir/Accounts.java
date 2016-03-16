@@ -34,6 +34,4 @@ public class Accounts {
         private long balance;
         private int failedAttempts;
     }
-
-
 }
