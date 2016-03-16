@@ -1,13 +1,10 @@
 package se.caglabs.icecuke.lab1;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.Arrays;
 
 public class Calculator {
 
     private Double display;
-    private List<Double> memory;
 
     public Calculator() {
         clear();
@@ -15,7 +12,6 @@ public class Calculator {
 
     public Calculator clear() {
         display = 0.0;
-        memory = new ArrayList<>();
         return this;
     }
 
@@ -39,10 +35,8 @@ public class Calculator {
     }
 
     public Calculator average(Double... values) {
-        Collections.addAll(memory, values);
-
         // Recalculate the current average
-        display = memory
+        display = Arrays.asList(values)
                 .stream()
                 .mapToDouble(Double::doubleValue)
                 .sum() / values.length;
