@@ -13,46 +13,66 @@ import java.util.*;
  * Alla metoder loggar (kastar state) ut automatiskt när de är klara.
  */
 public class RadbankirFacadur {
+    private static final long MAX_ACCOUNT_BALANCE = 1000000L;
+    private static final int MAX_WITHDRAW_AMOUNT = 5000;
+
     private final Billbox billbox;
-    private final Accounts accounts;
+    private final AccountManager accountManager;
+    private Account account;
 
-    private Accounts.Account account;
-
-    public RadbankirFacadur(Billbox billbox) {
+    public RadbankirFacadur(Billbox billbox, AccountManager accountManager) {
         this.billbox = billbox;
-        this.accounts = new Accounts();
+        this.accountManager = accountManager;
     }
 
-    // Sätt upp initialt state
     public void login(long accountNumber, int pinCode) throws RadbankirExceptionur {
-        Map<Long, Accounts.Account> accounts = this.accounts.getAccounts();
-        if(accounts.get(accountNumber).getPinCode() != pinCode){
-            account = null;
-            throw new RadbankirExceptionur("Fel pincod");
-        }
-        account = accounts.get(accountNumber);
+        account = accountManager.login(accountNumber, pinCode);
     }
 
-    public Map<RadbankirMaintenancur.Valuesur, Integer> withDraw(int amount) throws RadbankirExceptionur {
-        if(amount > 5000){
+    public List<Valuesur> withdraw(int amount) throws RadbankirExceptionur {
+        if(account == null) {
+            throw new RadbankirExceptionur("Ej inloggad");
+        }
+
+        if(amount > MAX_WITHDRAW_AMOUNT){
             throw new RadbankirExceptionur("Utag över 5000 kr");
         }
+
         if(account.getBalance() < amount ){
             throw new RadbankirExceptionur("För lite pengar på kontot");
         }
-        Map<RadbankirMaintenancur.Valuesur, Integer> withDrawNotes = billbox.withDraw(amount);
-        return withDrawNotes;
+
+        List<Valuesur> withdrawnBills = billbox.withdraw(amount);
+        account.setBalance(account.getBalance() - amount);
+        return withdrawnBills;
     }
 
-    public void deposit(List<Integer> bills) throws RadbankirExceptionur {
+    public long getBalance() throws RadbankirExceptionur {
+        if(account == null) {
+            throw new RadbankirExceptionur("Ej inloggad");
+        }
 
-    }
-
-    public int getBalance() throws RadbankirExceptionur {
-        return 0;
+        return account.getBalance();
     }
 
     public void cancel() {
+        account = null;
+    }
 
+    public List<Valuesur> deposit(List<Valuesur> bills) throws RadbankirExceptionur {
+        if(account == null) {
+            throw new RadbankirExceptionur("Ej inloggad");
+        }
+
+        long totalDepositAmount = bills.stream().mapToLong(Valuesur::getNoteValue).sum();
+        if( totalDepositAmount > MAX_ACCOUNT_BALANCE) {
+            throw new RadbankirExceptionur("Insättning på " + totalDepositAmount + "kr kan ej göras då kontot kommer överstiga " + MAX_ACCOUNT_BALANCE + "kr");
+        }
+
+        List<Valuesur> returnedBills = billbox.deposit(bills);
+        long actualDepositAmount = totalDepositAmount - returnedBills.stream().mapToLong(Valuesur::getNoteValue).sum();
+        account.setBalance(account.getBalance() + actualDepositAmount);
+
+        return returnedBills;
     }
 }

@@ -1,44 +1,28 @@
-/*
- * NYPS 2020
- *
- * User: joebin
- * Date: 2016-03-10
- * Time: 18:21
- */
 package se.caglabs.radbankir;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
 /**
- *
+ * Project:Tungur-knivur
+ * User: fredrik
+ * Date: 16/03/16
+ * Time: 18:27
  */
-public interface RadbankirMaintenancur {
+public class RadbankirMaintenancur {
 
-    public enum Valuesur {
-        HUNDRED(100),
-        TWOHUNDRED(200),
-        FIVEHUNDRED(500),
-        THOUSAND(1000);
 
-        private final int noteValue;
+    private Billbox billbox;
 
-        Valuesur(int noteValue) {
-            this.noteValue = noteValue;
-        }
-
-        public static Valuesur from(int noteValue) {
-            return Arrays.asList(values())
-                    .stream()
-                    .filter(v -> v.noteValue == noteValue)
-                    .findFirst()
-                    .get();
-        }
+    public RadbankirMaintenancur(Billbox billbox) {
+        this.billbox = billbox;
     }
 
-    int loadBills(Valuesur valuesur, int antal);
+    public List<Valuesur> loadBills(Valuesur valuesur, int antal) throws RadbankirExceptionur {
+        return billbox.deposit(valuesur, antal);
+    }
 
-    Map<Valuesur, Integer> showMeTheMoney();
-
-
-
+    public Map<Valuesur, Integer> showMeTheMoney() {
+        return billbox.getBills();
+    }
 }
