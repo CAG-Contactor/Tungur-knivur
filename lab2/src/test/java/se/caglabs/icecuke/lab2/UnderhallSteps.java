@@ -7,13 +7,16 @@ import cucumber.api.java.sv.Så;
 import org.junit.Assert;
 import se.caglabs.radbankir.Billbox;
 import se.caglabs.radbankir.RadbankirMaintenancur;
+import se.caglabs.radbankir.Valuesur;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class UnderhallSteps {
 
-    private Map<RadbankirMaintenancur.Valuesur, Integer> antalReturnerade;
+    private Map<Valuesur, Integer> antalReturnerade;
     private RadbankirMaintenancur radbankirMaintenancur;
     private Billbox billbox;
 
@@ -22,27 +25,31 @@ public class UnderhallSteps {
         antalReturnerade = new HashMap<>();
         billbox = BankomatInstans.getInstans().getBillbox();
         radbankirMaintenancur = BankomatInstans.getInstans().getRadbankirMaintenancur();
+        billbox.empty();
     }
 
     @Givet("^att det finns (\\d+) sedlar i facket för (\\d+)-kronorssedlar$")
     public void attDetFinnsSedlarIFacketFörKronorssedlar(int antal, int valor) throws Throwable {
-        billbox.empty();
-        RadbankirMaintenancur.Valuesur valuesur = RadbankirMaintenancur.Valuesur.from(valor);
-        billbox.addBills(valuesur, antal);
+        Valuesur valuesur = Valuesur.from(valor);
+        List<Valuesur> valuesurs = new ArrayList<>();
+        for(int i = 0; i < antal; i++ ) {
+            valuesurs.add(valuesur);
+        }
+        billbox.deposit(valuesurs);
     }
 
-    @När("^teknikern fyller med (\\d+) (\\d+)-kronorssedlar$")
+    @När("^(?:att |)tekniker(?:n|) fyll(?:er|t) på med (\\d+) (\\d+)-kronorssedlar$")
     public void teknikernFyllerMedKronorssedlar(int antal, int valor) throws Throwable {
-        RadbankirMaintenancur.Valuesur valuesur = RadbankirMaintenancur.Valuesur.from(valor);
-        int antalReturnerade = radbankirMaintenancur.loadBills(valuesur, antal);
+        Valuesur valuesur = Valuesur.from(valor);
+        List<Valuesur> returneradeSedlar = radbankirMaintenancur.loadBills(valuesur, antal);
 
         this.antalReturnerade.putIfAbsent(valuesur, 0);
-        this.antalReturnerade.put(valuesur, antalReturnerade + this.antalReturnerade.get(valuesur));
+        this.antalReturnerade.put(valuesur, returneradeSedlar.size() + this.antalReturnerade.get(valuesur));
     }
 
     @Så("^matar bankomaten ut (\\d+) (\\d+)-kronorssedlar$")
     public void matarBankomatenUtKronorssedlar(int antal, int valor) throws Throwable {
-        RadbankirMaintenancur.Valuesur valuesur = RadbankirMaintenancur.Valuesur.from(valor);
+        Valuesur valuesur = Valuesur.from(valor);
 
         antalReturnerade.putIfAbsent(valuesur, 0);
         Assert.assertEquals(Integer.valueOf(antal), antalReturnerade.get(valuesur));
@@ -51,7 +58,7 @@ public class UnderhallSteps {
 
     @Så("^innehåller bankomaten (\\d+) (\\d+)-kronorssedlar$")
     public void innehållerBankomatenKronorssedlar(int antal, int valor) throws Throwable {
-        RadbankirMaintenancur.Valuesur valuesur = RadbankirMaintenancur.Valuesur.from(valor);
+        Valuesur valuesur = Valuesur.from(valor);
         int antalSedlarIBankomat = radbankirMaintenancur.showMeTheMoney().get(valuesur);
         Assert.assertEquals(antal, antalSedlarIBankomat);
     }

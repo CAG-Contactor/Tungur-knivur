@@ -13,58 +13,63 @@ import java.util.*;
 
 @Data
 public class Billbox {
-    private static final int MAX_AMOUNT = 100;
+    private static final int MAX_BILLS_PER_VALUESUR = 100;
 
-    private Map<RadbankirMaintenancur.Valuesur, Integer> bills = new HashMap<>();
+    private Map<Valuesur, Integer> bills = new HashMap<>();
 
     public Billbox() {
         empty();
     }
 
-    public int addBills(RadbankirMaintenancur.Valuesur noteValue, int amount) {
-        int total = bills.get(noteValue) + amount;
-        int result = 0;
-
-        if( total > MAX_AMOUNT) {
-            result = (total - MAX_AMOUNT);
-            total = MAX_AMOUNT;
-        }
-
-        bills.put(noteValue, total);
-        return result;
-    }
-
-    public int getBills(RadbankirMaintenancur.Valuesur noteValue) {
-        return bills.get(noteValue);
-    }
-
     public void empty() {
-        bills.put(RadbankirMaintenancur.Valuesur.HUNDRED, 0);
-        bills.put(RadbankirMaintenancur.Valuesur.TWOHUNDRED, 0);
-        bills.put(RadbankirMaintenancur.Valuesur.FIVEHUNDRED, 0);
-        bills.put(RadbankirMaintenancur.Valuesur.THOUSAND, 0);
+        bills.put(Valuesur.HUNDRED, 0);
+        bills.put(Valuesur.TWOHUNDRED, 0);
+        bills.put(Valuesur.FIVEHUNDRED, 0);
+        bills.put(Valuesur.THOUSAND, 0);
     }
 
-    public Map<RadbankirMaintenancur.Valuesur,Integer> withDraw(int amount) throws RadbankirExceptionur {
-        int countdown = amount;
-        Map<RadbankirMaintenancur.Valuesur, Integer> result = new HashMap<>();
-
-        result.put(RadbankirMaintenancur.Valuesur.THOUSAND, countdown / 1000);
-        countdown -= (countdown / 1000) * 1000;
-
-        result.put(RadbankirMaintenancur.Valuesur.FIVEHUNDRED, amount / 500);
-        countdown -= (countdown / 500) * 500;
-
-        result.put(RadbankirMaintenancur.Valuesur.FIVEHUNDRED, amount / 200);
-        countdown -= (countdown / 200) * 200;
-
-        result.put(RadbankirMaintenancur.Valuesur.FIVEHUNDRED, amount / 100);
-        countdown -= (countdown / 100) * 100;
-
-        if(countdown > 0) {
-            throw new RadbankirExceptionur("Summan var inte delbar med antalet tillgängliga sedlar i bankomaten");
+    public List<Valuesur> withdraw(final int amount) throws RadbankirExceptionur {
+        List<Valuesur> withdrawnBills = new ArrayList<>();
+        int withdrawnAmount = withdraw(withdrawnBills, amount);
+        if( withdrawnAmount != 0 ) {
+            deposit(withdrawnBills);
+            throw new RadbankirExceptionur("Det fanns inte sedlar i maskinen för att kunna ta ut summan " + amount);
         }
 
-        return result;
+        return withdrawnBills;
+    }
+
+    private int withdraw(List<Valuesur> withdrawnBills, int amountLeftToWithdraw) {
+        for(Valuesur valuesur : Valuesur.values()) {
+            if( amountLeftToWithdraw >= valuesur.getNoteValue() && bills.get(valuesur) > 0) {
+                withdrawnBills.add(valuesur);
+                bills.put(valuesur, bills.get(valuesur) - 1);
+                return withdraw(withdrawnBills, amountLeftToWithdraw - valuesur.getNoteValue());
+            }
+        }
+
+        return amountLeftToWithdraw;
+    }
+
+    public List<Valuesur> deposit(List<Valuesur> bills) throws RadbankirExceptionur {
+        List<Valuesur> billsToReturn = new ArrayList<>();
+
+        for( Valuesur valuesur : bills) {
+            if (this.bills.get(valuesur) +  1 > MAX_BILLS_PER_VALUESUR) {
+                billsToReturn.add(valuesur);
+            } else {
+                this.bills.put(valuesur, this.bills.get(valuesur) + 1);
+            }
+        }
+
+        return billsToReturn;
+    }
+
+    public List<Valuesur> deposit(Valuesur valuesur, int count) throws RadbankirExceptionur {
+        List<Valuesur> valuesurs = new ArrayList<>();
+        for( int i = 0; i < count; i++) {
+            valuesurs.add(valuesur);
+        }
+        return deposit(valuesurs);
     }
 }
