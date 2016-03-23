@@ -38,7 +38,7 @@ public class UnderhallSteps {
         billbox.deposit(valuesurs);
     }
 
-    @När("^(?:att |)tekniker(?:n|) fyll(?:er|t) på med (\\d+) (\\d+)-kronorssedlar$")
+    @När("^(?:att |)tekniker(?:n|) fyll(?:er|t) på med ([-]*\\d+) (\\d+)-kronorssedlar$")
     public void teknikernFyllerMedKronorssedlar(int antal, int valor) throws Throwable {
         Valuesur valuesur = Valuesur.from(valor);
         List<Valuesur> returneradeSedlar = radbankirMaintenancur.loadBills(valuesur, antal);

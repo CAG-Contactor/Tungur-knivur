@@ -1,6 +1,6 @@
 package se.caglabs.icecuke.lab2;
 
-import cucumber.api.PendingException;
+import cucumber.api.DataTable;
 import cucumber.api.java.Before;
 import cucumber.api.java.sv.Givet;
 import cucumber.api.java.sv.När;
@@ -8,8 +8,11 @@ import cucumber.api.java.sv.Så;
 import org.junit.Assert;
 import se.caglabs.radbankir.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Project:Tungur-knivur
@@ -25,7 +28,7 @@ public class UttagSteps {
 
     private long withdrawnAmount;
     private RadbankirExceptionur withdrawException;
-
+    private List<Valuesur> withdrawnBills;
 
     @Before
     public void setup() {
@@ -34,6 +37,7 @@ public class UttagSteps {
         accountManager = BankomatInstans.getInstans().getAccountManager();
         withdrawException = null;
         withdrawnAmount = 0;
+        withdrawnBills = new ArrayList<>();
     }
 
     @Givet("^att bankomaten är full$")
@@ -49,27 +53,27 @@ public class UttagSteps {
         billbox.empty();
     }
 
-    @Givet("^att kunden med kontonummer (\\d+) har (\\d+)kr på kontot$")
+    @Givet("^att kunden med kontonummer ([-]*\\d+) har ([-]*\\d+)kr på kontot$")
     public void att_kunden_med_kontonummer_har_kr_på_kontot(int kontonummer, int summa) throws Throwable {
         accountManager.findAccountByAccountNumber(kontonummer).setBalance(summa);
     }
 
-    @När("^kunden tar ut (\\d+)kr$")
+    @När("^kunden tar ut ([-]*\\d+)kr$")
     public void kundenTarUtKr(int uttagsSumma) throws Throwable {
         try {
-            List<Valuesur> bills = radbankirFacadur.withdraw(uttagsSumma);
-            withdrawnAmount = bills.stream().mapToLong(Valuesur::getNoteValue).sum();
+            withdrawnBills = radbankirFacadur.withdraw(uttagsSumma);
+            withdrawnAmount = withdrawnBills.stream().mapToLong(Valuesur::getNoteValue).sum();
         } catch (RadbankirExceptionur e) {
             withdrawException = e;
         }
     }
 
-    @Så("^har kunden (\\d+)kr (?:kvar |)på kontot$")
+    @Så("^har kunden ([-]*\\d+)kr (?:kvar |)på kontot$")
     public void harKundenKrKvarPåKontot(int summa) throws Throwable {
         Assert.assertEquals(summa, radbankirFacadur.getBalance());
     }
 
-    @Så("^har kunden fått ut (\\d+)kr$")
+    @Så("^har kunden fått ut ([-]*\\d+)kr$")
     public void harKundenFåttUtKr(int summa) throws Throwable {
         Assert.assertEquals(Long.valueOf(summa), Long.valueOf(withdrawnAmount));
     }
@@ -86,4 +90,15 @@ public class UttagSteps {
         Assert.assertEquals(Long.valueOf(0), Long.valueOf(withdrawnAmount));
     }
 
+
+    @Så("^har kunden fått ut$")
+    public void har_kunden_fått_ut(DataTable dataTable) throws Throwable {
+        Map<Integer, Long> collect = withdrawnBills.stream().collect(Collectors.groupingBy(Valuesur::getNoteValue, Collectors.counting()));
+        dataTable.getGherkinRows().forEach(row -> {
+            Integer valor = Integer.valueOf(row.getCells().get(1));
+            Long antal = Long.valueOf(row.getCells().get(0).trim());
+            Assert.assertEquals("Kunden fick fel antal sedlar med valör " + valor, antal, collect.getOrDefault(valor, 0L));
+        });
+        System.out.println(collect);
+    }
 }
