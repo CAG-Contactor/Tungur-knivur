@@ -1,5 +1,6 @@
 package se.caglabs.icecuke.lab2;
 
+import cucumber.api.PendingException;
 import cucumber.api.java.Before;
 import cucumber.api.java.sv.Givet;
 import cucumber.api.java.sv.När;
@@ -61,5 +62,10 @@ public class UnderhallSteps {
         Valuesur valuesur = Valuesur.from(valor);
         int antalSedlarIBankomat = radbankirMaintenancur.showMeTheMoney().get(valuesur);
         Assert.assertEquals(antal, antalSedlarIBankomat);
+    }
+
+    @Så("^finns det (\\d+) (\\d+)-kronorssedlar i bankomaten$")
+    public void finns_det_kronorssedlar_i_bankomaten(int antal, int valor) throws Throwable {
+        Assert.assertEquals(Integer.valueOf(billbox.getBills().get(Valuesur.from(valor))), Integer.valueOf(antal));
     }
 }

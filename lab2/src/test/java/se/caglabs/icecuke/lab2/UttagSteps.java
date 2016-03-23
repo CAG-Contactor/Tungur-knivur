@@ -99,6 +99,5 @@ public class UttagSteps {
             Long antal = Long.valueOf(row.getCells().get(0).trim());
             Assert.assertEquals("Kunden fick fel antal sedlar med valör " + valor, antal, collect.getOrDefault(valor, 0L));
         });
-        System.out.println(collect);
     }
 }
