@@ -3,8 +3,8 @@ package se.caglabs.icecuke.lab2;
 import lombok.Data;
 import se.caglabs.radbankir.AccountManager;
 import se.caglabs.radbankir.Billbox;
-import se.caglabs.radbankir.RadbankirFacadur;
-import se.caglabs.radbankir.RadbankirMaintenancur;
+import se.caglabs.radbankir.impl.RadbankirFacadur;
+import se.caglabs.radbankir.impl.RadbankirMaintenancur;
 
 @Data
 public class BankomatInstans {

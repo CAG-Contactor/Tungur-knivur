@@ -6,7 +6,7 @@ import cucumber.api.java.sv.När;
 import cucumber.api.java.sv.Så;
 import org.junit.Assert;
 import se.caglabs.radbankir.Billbox;
-import se.caglabs.radbankir.RadbankirMaintenancur;
+import se.caglabs.radbankir.impl.RadbankirMaintenancur;
 import se.caglabs.radbankir.Valuesur;
 
 import java.util.ArrayList;
@@ -38,7 +38,7 @@ public class UnderhallSteps {
         billbox.deposit(valuesurs);
     }
 
-    @När("^(?:att |)tekniker(?:n|) fyll(?:er|t) på med (\\d+) (\\d+)-kronorssedlar$")
+    @När("^(?:att |)tekniker(?:n|) fyll(?:er|t) på med ([-]*\\d+) (\\d+)-kronorssedlar$")
     public void teknikernFyllerMedKronorssedlar(int antal, int valor) throws Throwable {
         Valuesur valuesur = Valuesur.from(valor);
         List<Valuesur> returneradeSedlar = radbankirMaintenancur.loadBills(valuesur, antal);
@@ -61,5 +61,10 @@ public class UnderhallSteps {
         Valuesur valuesur = Valuesur.from(valor);
         int antalSedlarIBankomat = radbankirMaintenancur.showMeTheMoney().get(valuesur);
         Assert.assertEquals(antal, antalSedlarIBankomat);
+    }
+
+    @Så("^finns det (\\d+) (\\d+)-kronorssedlar i bankomaten$")
+    public void finns_det_kronorssedlar_i_bankomaten(int antal, int valor) throws Throwable {
+        Assert.assertEquals(Integer.valueOf(billbox.getBills().get(Valuesur.from(valor))), Integer.valueOf(antal));
     }
 }

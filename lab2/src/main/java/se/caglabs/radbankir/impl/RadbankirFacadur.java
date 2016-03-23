@@ -5,14 +5,16 @@
  * Date: 2016-03-10
  * Time: 18:12
  */
-package se.caglabs.radbankir;
+package se.caglabs.radbankir.impl;
+
+import se.caglabs.radbankir.*;
 
 import java.util.*;
 
 /**
  * Alla metoder loggar (kastar state) ut automatiskt när de är klara.
  */
-public class RadbankirFacadur {
+public class RadbankirFacadur implements IRadbankirFacadur {
     private static final long MAX_ACCOUNT_BALANCE = 1000000L;
     private static final int MAX_WITHDRAW_AMOUNT = 5000;
 
@@ -25,10 +27,12 @@ public class RadbankirFacadur {
         this.accountManager = accountManager;
     }
 
+    @Override
     public void login(long accountNumber, int pinCode) throws RadbankirExceptionur {
         account = accountManager.login(accountNumber, pinCode);
     }
 
+    @Override
     public List<Valuesur> withdraw(int amount) throws RadbankirExceptionur {
         if(account == null) {
             throw new RadbankirExceptionur("Ej inloggad");
@@ -47,6 +51,7 @@ public class RadbankirFacadur {
         return withdrawnBills;
     }
 
+    @Override
     public long getBalance() throws RadbankirExceptionur {
         if(account == null) {
             throw new RadbankirExceptionur("Ej inloggad");
@@ -55,10 +60,12 @@ public class RadbankirFacadur {
         return account.getBalance();
     }
 
+    @Override
     public void cancel() {
         account = null;
     }
 
+    @Override
     public List<Valuesur> deposit(List<Valuesur> bills) throws RadbankirExceptionur {
         if(account == null) {
             throw new RadbankirExceptionur("Ej inloggad");
