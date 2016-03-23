@@ -7,6 +7,7 @@ import cucumber.api.java.sv.När;
 import cucumber.api.java.sv.Så;
 import org.junit.Assert;
 import se.caglabs.radbankir.*;
+import se.caglabs.radbankir.impl.RadbankirFacadur;
 
 import java.util.ArrayList;
 import java.util.Arrays;

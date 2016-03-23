@@ -1,6 +1,5 @@
 package se.caglabs.icecuke.lab2;
 
-import cucumber.api.PendingException;
 import cucumber.api.java.Before;
 import cucumber.api.java.sv.Givet;
 import cucumber.api.java.sv.När;
@@ -9,7 +8,7 @@ import org.junit.Assert;
 import se.caglabs.radbankir.Account;
 import se.caglabs.radbankir.AccountManager;
 import se.caglabs.radbankir.RadbankirExceptionur;
-import se.caglabs.radbankir.RadbankirFacadur;
+import se.caglabs.radbankir.impl.RadbankirFacadur;
 
 public class InloggningSteps {
 

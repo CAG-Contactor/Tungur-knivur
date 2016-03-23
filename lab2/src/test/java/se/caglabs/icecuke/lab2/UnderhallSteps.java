@@ -1,13 +1,12 @@
 package se.caglabs.icecuke.lab2;
 
-import cucumber.api.PendingException;
 import cucumber.api.java.Before;
 import cucumber.api.java.sv.Givet;
 import cucumber.api.java.sv.När;
 import cucumber.api.java.sv.Så;
 import org.junit.Assert;
 import se.caglabs.radbankir.Billbox;
-import se.caglabs.radbankir.RadbankirMaintenancur;
+import se.caglabs.radbankir.impl.RadbankirMaintenancur;
 import se.caglabs.radbankir.Valuesur;
 
 import java.util.ArrayList;
