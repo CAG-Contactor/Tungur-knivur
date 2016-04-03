@@ -2,8 +2,8 @@ package se.caglabs.icecuke.lab2;
 
 import cucumber.api.java.Before;
 import cucumber.api.java.sv.När;
-import se.caglabs.radbankir.impl.RadbankirFacadur;
-import se.caglabs.radbankir.Valuesur;
+import se.caglabs.radbankir.RadbankirFacadur;
+import se.caglabs.radbankir.model.Valuesur;
 
 import java.util.ArrayList;
 import java.util.List;

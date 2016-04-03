@@ -5,16 +5,16 @@ import cucumber.api.java.sv.Givet;
 import cucumber.api.java.sv.När;
 import cucumber.api.java.sv.Så;
 import org.junit.Assert;
-import se.caglabs.radbankir.Account;
-import se.caglabs.radbankir.AccountManager;
-import se.caglabs.radbankir.RadbankirExceptionur;
-import se.caglabs.radbankir.impl.RadbankirFacadur;
+import se.caglabs.radbankir.model.Account;
+import se.caglabs.radbankir.exception.RadbankirExceptionur;
+import se.caglabs.radbankir.RadbankirFacadur;
+import se.caglabs.radbankir.service.IAccountManager;
 
 public class InloggningSteps {
 
     private int kontonummer;
     private RadbankirFacadur radbankirFacadur;
-    private AccountManager accountManager;
+    private IAccountManager accountManager;
 
     @Before
     public void setup() {

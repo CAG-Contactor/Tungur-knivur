@@ -5,14 +5,16 @@
  * Date: 2016-03-10
  * Time: 18:31
  */
-package se.caglabs.radbankir;
+package se.caglabs.radbankir.service;
 
 import lombok.*;
+import se.caglabs.radbankir.exception.RadbankirExceptionur;
+import se.caglabs.radbankir.model.Valuesur;
 
 import java.util.*;
 
 @Data
-public class Billbox {
+public class Billbox implements IBillbox {
     private static final int MAX_BILLS_PER_VALUESUR = 100;
 
     private Map<Valuesur, Integer> bills = new HashMap<>();
@@ -21,6 +23,7 @@ public class Billbox {
         empty();
     }
 
+    @Override
     public void empty() {
         bills.put(Valuesur.HUNDRED, 0);
         bills.put(Valuesur.TWOHUNDRED, 0);
@@ -28,12 +31,13 @@ public class Billbox {
         bills.put(Valuesur.THOUSAND, 0);
     }
 
+    @Override
     public List<Valuesur> withdraw(final int amount) throws RadbankirExceptionur {
         List<Valuesur> withdrawnBills = new ArrayList<>();
         int withdrawnAmount = withdraw(withdrawnBills, amount);
         if( withdrawnAmount != 0 ) {
             deposit(withdrawnBills);
-            throw new RadbankirExceptionur("Det fanns inte sedlar i maskinen för att kunna ta ut summan " + amount);
+            throw new RadbankirExceptionur("There wasn't enough bills in the machine to withdraw the amount: " + amount);
         }
 
         return withdrawnBills;
@@ -51,7 +55,8 @@ public class Billbox {
         return amountLeftToWithdraw;
     }
 
-    public List<Valuesur> deposit(List<Valuesur> bills) throws RadbankirExceptionur {
+    @Override
+    public List<Valuesur> deposit(List<Valuesur> bills) {
         List<Valuesur> billsToReturn = new ArrayList<>();
 
         for( Valuesur valuesur : bills) {
@@ -65,11 +70,17 @@ public class Billbox {
         return billsToReturn;
     }
 
-    public List<Valuesur> deposit(Valuesur valuesur, int count) throws RadbankirExceptionur {
+    @Override
+    public List<Valuesur> deposit(Valuesur valuesur, int count) {
         List<Valuesur> valuesurs = new ArrayList<>();
         for( int i = 0; i < count; i++) {
             valuesurs.add(valuesur);
         }
         return deposit(valuesurs);
+    }
+
+    @Override
+    public Map<Valuesur, Integer> getBillTrayStatus() {
+        return new HashMap<>(bills);
     }
 }

@@ -1,24 +1,23 @@
 package se.caglabs.icecuke.lab2;
 
 import lombok.Data;
-import se.caglabs.radbankir.AccountManager;
-import se.caglabs.radbankir.Billbox;
-import se.caglabs.radbankir.impl.RadbankirFacadur;
-import se.caglabs.radbankir.impl.RadbankirMaintenancur;
+import se.caglabs.radbankir.service.AccountManager;
+import se.caglabs.radbankir.service.Billbox;
+import se.caglabs.radbankir.RadbankirFacadur;
+import se.caglabs.radbankir.service.IAccountManager;
+import se.caglabs.radbankir.service.IBillbox;
 
 @Data
 public class BankomatInstans {
     private static BankomatInstans instans;
 
-    private RadbankirMaintenancur radbankirMaintenancur;
+    private IBillbox billbox;
+    private IAccountManager accountManager;
     private RadbankirFacadur radbankirFacadur;
-    private Billbox billbox;
-    private AccountManager accountManager;
 
     private BankomatInstans() {
         accountManager = new AccountManager();
         billbox = new Billbox();
-        radbankirMaintenancur = new RadbankirMaintenancur(billbox);
         radbankirFacadur = new RadbankirFacadur(billbox, accountManager);
     }
 
@@ -28,9 +27,5 @@ public class BankomatInstans {
         }
 
         return instans;
-    }
-
-    public AccountManager getAccountManager() {
-        return accountManager;
     }
 }

@@ -1,4 +1,4 @@
-package se.caglabs.radbankir;
+package se.caglabs.radbankir.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

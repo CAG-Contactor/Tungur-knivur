@@ -1,7 +1,10 @@
-package se.caglabs.radbankir;
+package se.caglabs.radbankir.model;
 
 import java.util.Arrays;
 
+/**
+ * An enum defining all bill values
+ */
 public enum Valuesur {
     FIVEHUNDRED(500),
     HUNDRED(100),

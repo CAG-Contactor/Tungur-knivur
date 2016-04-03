@@ -5,24 +5,23 @@
  * Date: 2016-03-10
  * Time: 18:12
  */
-package se.caglabs.radbankir.impl;
+package se.caglabs.radbankir.service;
 
-import se.caglabs.radbankir.*;
+import se.caglabs.radbankir.exception.RadbankirExceptionur;
+import se.caglabs.radbankir.model.Account;
+import se.caglabs.radbankir.model.Valuesur;
 
 import java.util.*;
 
-/**
- * Alla metoder loggar (kastar state) ut automatiskt när de är klara.
- */
-public class RadbankirFacadur implements IRadbankirFacadur {
+public class RadbankirService implements IRadbankirService {
     private static final long MAX_ACCOUNT_BALANCE = 1000000L;
     private static final int MAX_WITHDRAW_AMOUNT = 5000;
 
-    private final Billbox billbox;
-    private final AccountManager accountManager;
+    private final IBillbox billbox;
+    private final IAccountManager accountManager;
     private Account account;
 
-    public RadbankirFacadur(Billbox billbox, AccountManager accountManager) {
+    public RadbankirService(IBillbox billbox, IAccountManager accountManager) {
         this.billbox = billbox;
         this.accountManager = accountManager;
     }
@@ -35,15 +34,15 @@ public class RadbankirFacadur implements IRadbankirFacadur {
     @Override
     public List<Valuesur> withdraw(int amount) throws RadbankirExceptionur {
         if(account == null) {
-            throw new RadbankirExceptionur("Ej inloggad");
+            throw new RadbankirExceptionur("Not authenticated");
         }
 
         if(amount > MAX_WITHDRAW_AMOUNT){
-            throw new RadbankirExceptionur("Utag över 5000 kr");
+            throw new RadbankirExceptionur("Can not withdraw more than " + MAX_WITHDRAW_AMOUNT + "kr");
         }
 
         if(account.getBalance() < amount ){
-            throw new RadbankirExceptionur("För lite pengar på kontot");
+            throw new RadbankirExceptionur("Not enough money on the account");
         }
 
         List<Valuesur> withdrawnBills = billbox.withdraw(amount);
@@ -54,7 +53,7 @@ public class RadbankirFacadur implements IRadbankirFacadur {
     @Override
     public long getBalance() throws RadbankirExceptionur {
         if(account == null) {
-            throw new RadbankirExceptionur("Ej inloggad");
+            throw new RadbankirExceptionur("Not authenticated");
         }
 
         return account.getBalance();
@@ -68,12 +67,12 @@ public class RadbankirFacadur implements IRadbankirFacadur {
     @Override
     public List<Valuesur> deposit(List<Valuesur> bills) throws RadbankirExceptionur {
         if(account == null) {
-            throw new RadbankirExceptionur("Ej inloggad");
+            throw new RadbankirExceptionur("Not authenticated");
         }
 
         long totalDepositAmount = bills.stream().mapToLong(Valuesur::getNoteValue).sum();
         if( totalDepositAmount > MAX_ACCOUNT_BALANCE) {
-            throw new RadbankirExceptionur("Insättning på " + totalDepositAmount + "kr kan ej göras då kontot kommer överstiga " + MAX_ACCOUNT_BALANCE + "kr");
+            throw new RadbankirExceptionur("Couldn't deposit " + totalDepositAmount + "kr because this would violate the max account balance of " + MAX_ACCOUNT_BALANCE + "kr");
         }
 
         List<Valuesur> returnedBills = billbox.deposit(bills);

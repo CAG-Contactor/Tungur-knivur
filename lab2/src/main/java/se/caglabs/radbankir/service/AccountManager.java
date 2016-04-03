@@ -5,12 +5,15 @@
  * Date: 2016-03-10
  * Time: 18:30
  */
-package se.caglabs.radbankir;
+package se.caglabs.radbankir.service;
+
+import se.caglabs.radbankir.exception.RadbankirExceptionur;
+import se.caglabs.radbankir.model.Account;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class AccountManager {
+public class AccountManager implements IAccountManager {
     private static final int MAX_NUMBER_OF_FAILED_LOGINS = 3;
     private Map<Long, Account> accounts;
 
@@ -25,6 +28,7 @@ public class AccountManager {
         accounts.put(4242424L, new Account("Utvecklurs", 4242424L, 4242, 0L, 0));
     }
 
+    @Override
     public Account findAccountByAccountNumber(final long accountNumber) throws RadbankirExceptionur {
         return accounts
                 .values()
@@ -34,10 +38,12 @@ public class AccountManager {
                 .orElseThrow(() -> new RadbankirExceptionur("Kunde inte hitta konto med kontonummer " + accountNumber));
     }
 
+    @Override
     public boolean isAccountLocked(long accountNumber) throws RadbankirExceptionur {
         return findAccountByAccountNumber(accountNumber).getFailedAttempts() >= MAX_NUMBER_OF_FAILED_LOGINS;
     }
 
+    @Override
     public Account login(long accountNumber, int pinCode) throws RadbankirExceptionur {
         Account account = findAccountByAccountNumber(accountNumber);
         if( isAccountLocked(accountNumber)) {

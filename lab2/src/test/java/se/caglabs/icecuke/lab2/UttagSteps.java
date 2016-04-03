@@ -7,7 +7,10 @@ import cucumber.api.java.sv.När;
 import cucumber.api.java.sv.Så;
 import org.junit.Assert;
 import se.caglabs.radbankir.*;
-import se.caglabs.radbankir.impl.RadbankirFacadur;
+import se.caglabs.radbankir.exception.RadbankirExceptionur;
+import se.caglabs.radbankir.model.Valuesur;
+import se.caglabs.radbankir.service.IAccountManager;
+import se.caglabs.radbankir.service.IBillbox;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,8 +26,8 @@ import java.util.stream.Collectors;
  */
 public class UttagSteps {
 
-    private Billbox billbox;
-    private AccountManager accountManager;
+    private IBillbox billbox;
+    private IAccountManager accountManager;
     private RadbankirFacadur radbankirFacadur;
 
     private long withdrawnAmount;
