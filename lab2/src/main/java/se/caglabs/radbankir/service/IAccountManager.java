@@ -34,4 +34,11 @@ public interface IAccountManager {
      * @throws RadbankirExceptionur if the authentication failed
      */
     Account login(long accountNumber, int pinCode) throws RadbankirExceptionur;
+
+    /**
+     * Cancels any account operation
+     *
+     * @param accountNumber the account number to cancel operations
+     */
+    void cancel(long accountNumber);
 }

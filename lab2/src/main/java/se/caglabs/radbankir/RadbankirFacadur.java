@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * A facade for customer- and mainenance ATM services
+ * A facade for customer- and maintenance ATM services
  */
 public class RadbankirFacadur implements IRadbankirService, IMaintenanceService {
 

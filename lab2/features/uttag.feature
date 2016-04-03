@@ -9,6 +9,15 @@ Egenskap: kunder ska kunna ta ut pengar
     När kunden med kontonummer 1234567 loggar in med fel pinkod
     Så har kontot låsts
 
+  Scenario: som kund ska jag bara få tre försök att mata in pinkod
+    När kunden med kontonummer 4242424 loggar in med fel pinkod
+    Så har inte kontot låsts
+    När kunden med kontonummer 4242424 loggar in med fel pinkod
+    Så har inte kontot låsts
+    När kunden avbryter
+    När kunden med kontonummer 4242424 loggar in med fel pinkod
+    Så har inte kontot låsts
+
   Scenario: som kund ska jag kunna ta ut pengar som finns på mitt konto
     Givet att bankomaten är full
     Givet att kunden med kontonummer 1234567 är inloggad

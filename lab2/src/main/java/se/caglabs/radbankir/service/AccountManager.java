@@ -56,4 +56,14 @@ public class AccountManager implements IAccountManager {
             throw new RadbankirExceptionur("Felaktig pinkod användes");
         }
     }
+
+    @Override
+    public void cancel(final long accountNumber) {
+        try {
+            Account account = findAccountByAccountNumber(accountNumber);
+            account.setFailedAttempts(0);
+        } catch (Exception e) {
+            // Ignore
+        }
+    }
 }

@@ -19,7 +19,8 @@ public class RadbankirService implements IRadbankirService {
 
     private final IBillbox billbox;
     private final IAccountManager accountManager;
-    private Account account;
+    private Long accountNumber = null;
+    private boolean authenticated = false;
 
     public RadbankirService(IBillbox billbox, IAccountManager accountManager) {
         this.billbox = billbox;
@@ -28,12 +29,14 @@ public class RadbankirService implements IRadbankirService {
 
     @Override
     public void login(long accountNumber, int pinCode) throws RadbankirExceptionur {
-        account = accountManager.login(accountNumber, pinCode);
+        this.accountNumber = accountNumber;
+        accountManager.login(accountNumber, pinCode);
+        authenticated = true;
     }
 
     @Override
     public List<Valuesur> withdraw(int amount) throws RadbankirExceptionur {
-        if(account == null) {
+        if(!authenticated) {
             throw new RadbankirExceptionur("Not authenticated");
         }
 
@@ -41,6 +44,7 @@ public class RadbankirService implements IRadbankirService {
             throw new RadbankirExceptionur("Can not withdraw more than " + MAX_WITHDRAW_AMOUNT + "kr");
         }
 
+        Account account = accountManager.findAccountByAccountNumber(accountNumber);
         if(account.getBalance() < amount ){
             throw new RadbankirExceptionur("Not enough money on the account");
         }
@@ -52,21 +56,23 @@ public class RadbankirService implements IRadbankirService {
 
     @Override
     public long getBalance() throws RadbankirExceptionur {
-        if(account == null) {
+        if(!authenticated) {
             throw new RadbankirExceptionur("Not authenticated");
         }
 
+        Account account = accountManager.findAccountByAccountNumber(accountNumber);
         return account.getBalance();
     }
 
     @Override
     public void cancel() {
-        account = null;
+        this.accountManager.cancel(accountNumber);
+        this.accountNumber = null;
     }
 
     @Override
     public List<Valuesur> deposit(List<Valuesur> bills) throws RadbankirExceptionur {
-        if(account == null) {
+        if(!authenticated) {
             throw new RadbankirExceptionur("Not authenticated");
         }
 
@@ -77,6 +83,8 @@ public class RadbankirService implements IRadbankirService {
 
         List<Valuesur> returnedBills = billbox.deposit(bills);
         long actualDepositAmount = totalDepositAmount - returnedBills.stream().mapToLong(Valuesur::getNoteValue).sum();
+
+        Account account = accountManager.findAccountByAccountNumber(accountNumber);
         account.setBalance(account.getBalance() + actualDepositAmount);
 
         return returnedBills;
