@@ -8,6 +8,18 @@ Egenskap: kunder ska kunna ta ut pengar
     Så får kunden ett felmeddelande att försöka igen
     När kunden med kontonummer 7654321 loggar in med fel pinkod
     Så får kunden ett felmeddelande om att kontot är låst
+    När kunden loggar in med kontonummer 4242424 och pinkod 4242
+    Så har kunden 56000kr på kontot
+
+  Scenario: som utvecklare ska jag inte mina pengar rensas vid varje omladdning av testerna
+    När kunden med kontonummer 7654321 loggar in med fel pinkod
+    Så får kunden ett felmeddelande att försöka igen
+    När kunden med kontonummer 7654321 loggar in med fel pinkod
+    Så får kunden ett felmeddelande att försöka igen
+    När kunden med kontonummer 7654321 loggar in med fel pinkod
+    Så får kunden ett felmeddelande om att kontot är låst
+    När kunden loggar in med kontonummer 4242424 och pinkod 4242
+    Så har kunden 112000kr på kontot
 
   Scenario: som kund ska jag bara få tre försök att mata in pinkod
     När kunden med kontonummer 7654321 loggar in med fel pinkod

