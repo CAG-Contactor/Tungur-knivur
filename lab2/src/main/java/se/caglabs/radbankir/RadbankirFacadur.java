@@ -19,7 +19,7 @@ public class RadbankirFacadur implements IRadbankirService, IMaintenanceService 
      * Constructor for creating a facade
      *
      * @param billbox the billbox containing the money
-     * @param accountManager the account
+     * @param accountManager the accountmanager responsible for handling accounts
      */
     public RadbankirFacadur(IBillbox billbox, IAccountManager accountManager) {
         this.radbankirService = new RadbankirService(billbox, accountManager);
