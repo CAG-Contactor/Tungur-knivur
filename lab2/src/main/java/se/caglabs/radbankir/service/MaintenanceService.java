@@ -30,4 +30,9 @@ public class MaintenanceService implements IMaintenanceService {
     public Map<Valuesur, Integer> getBillTrayStatus() {
         return billbox.getBillTrayStatus();
     }
+
+    @Override
+    public void emptyBillTrays() {
+        billbox.empty();
+    }
 }

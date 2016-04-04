@@ -1,5 +1,6 @@
 package se.caglabs.icecuke.lab2;
 
+import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import cucumber.api.java.sv.När;
 import se.caglabs.radbankir.RadbankirFacadur;
@@ -14,7 +15,12 @@ public class InsattningSteps {
 
     @Before
     public void setup() {
-        radbankirFacadur = BankomatInstans.getInstans().getRadbankirFacadur();
+        radbankirFacadur = BankomatInstans.getInstans();
+    }
+
+    @After
+    public void tearDown() {
+        BankomatInstans.destroy();
     }
 
     @När("^kunden sätter in (\\d+) (\\d+)-kronorssedel$")

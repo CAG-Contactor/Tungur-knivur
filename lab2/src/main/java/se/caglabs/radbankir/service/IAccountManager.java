@@ -1,5 +1,8 @@
 package se.caglabs.radbankir.service;
 
+import se.caglabs.radbankir.exception.AccountLockedException;
+import se.caglabs.radbankir.exception.AccountNotFoundException;
+import se.caglabs.radbankir.exception.LoginFailedException;
 import se.caglabs.radbankir.exception.RadbankirExceptionur;
 import se.caglabs.radbankir.model.Account;
 
@@ -31,9 +34,11 @@ public interface IAccountManager {
      * @param accountNumber the account number for the customer
      * @param pinCode       the pin code for the account
      * @return the account if found
-     * @throws RadbankirExceptionur if the authentication failed
+     * @throws AccountNotFoundException if the account couldn't be found
+     * @throws LoginFailedException if the login failed
+     * @throws AccountLockedException if the account is locked
      */
-    Account login(long accountNumber, int pinCode) throws RadbankirExceptionur;
+    Account login(long accountNumber, int pinCode) throws AccountNotFoundException, LoginFailedException, AccountLockedException;
 
     /**
      * Cancels any account operation

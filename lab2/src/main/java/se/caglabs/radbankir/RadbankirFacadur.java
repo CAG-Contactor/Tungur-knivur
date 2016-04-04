@@ -1,5 +1,8 @@
 package se.caglabs.radbankir;
 
+import se.caglabs.radbankir.exception.AccountLockedException;
+import se.caglabs.radbankir.exception.AccountNotFoundException;
+import se.caglabs.radbankir.exception.LoginFailedException;
 import se.caglabs.radbankir.exception.RadbankirExceptionur;
 import se.caglabs.radbankir.model.Valuesur;
 import se.caglabs.radbankir.service.*;
@@ -27,12 +30,16 @@ public class RadbankirFacadur implements IRadbankirService, IMaintenanceService 
     }
 
     /**
+     * Tries to login to the customers account using an account number and a pin code.
+     *
      * @param accountNumber the customers account number
      * @param pinCode       the customers pin code
-     * @throws RadbankirExceptionur
+     * @throws LoginFailedException if the login failed
+     * @throws AccountLockedException if the login failed and/or the account is locked
+     * @throws AccountNotFoundException if the account doesn't exist
      */
     @Override
-    public void login(long accountNumber, int pinCode) throws RadbankirExceptionur {
+    public void login(long accountNumber, int pinCode) throws LoginFailedException, AccountLockedException, AccountNotFoundException {
         radbankirService.login(accountNumber, pinCode);
     }
 
@@ -103,4 +110,14 @@ public class RadbankirFacadur implements IRadbankirService, IMaintenanceService 
     public Map<Valuesur, Integer> getBillTrayStatus() {
         return maintenanceService.getBillTrayStatus();
     }
+
+    /**
+     * Allows maintenance to clear all bill trays in the ATM
+     */
+    @Override
+    public void emptyBillTrays() {
+        maintenanceService.emptyBillTrays();
+    }
+
+
 }

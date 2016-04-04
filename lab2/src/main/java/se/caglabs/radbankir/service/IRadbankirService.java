@@ -1,5 +1,8 @@
 package se.caglabs.radbankir.service;
 
+import se.caglabs.radbankir.exception.AccountLockedException;
+import se.caglabs.radbankir.exception.AccountNotFoundException;
+import se.caglabs.radbankir.exception.LoginFailedException;
 import se.caglabs.radbankir.exception.RadbankirExceptionur;
 import se.caglabs.radbankir.model.Valuesur;
 
@@ -15,9 +18,10 @@ public interface IRadbankirService {
      *
      * @param accountNumber the customers account number
      * @param pinCode       the customers pin code
-     * @throws RadbankirExceptionur if the login failed
+     * @throws LoginFailedException if the login failed
+     * @throws AccountLockedException if the login failed and/or the account is locked
      */
-    void login(long accountNumber, int pinCode) throws RadbankirExceptionur;
+    void login(long accountNumber, int pinCode) throws LoginFailedException, AccountLockedException, AccountNotFoundException;
 
     /**
      * Withdraw an amount from the customers account.

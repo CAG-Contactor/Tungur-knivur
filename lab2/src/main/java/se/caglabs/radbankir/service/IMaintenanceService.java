@@ -27,4 +27,9 @@ public interface IMaintenanceService {
      * @return a map with all bill trays with the note value as the key and the number of bills as the value
      */
     Map<Valuesur, Integer> getBillTrayStatus();
+
+    /**
+     * Empties all trays with money
+     */
+    void emptyBillTrays();
 }

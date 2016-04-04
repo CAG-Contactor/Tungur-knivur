@@ -18,16 +18,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-/**
- * Project:Tungur-knivur
- * User: fredrik
- * Date: 16/03/16
- * Time: 20:02
- */
 public class UttagSteps {
 
-    private IBillbox billbox;
-    private IAccountManager accountManager;
     private RadbankirFacadur radbankirFacadur;
 
     private long withdrawnAmount;
@@ -36,9 +28,7 @@ public class UttagSteps {
 
     @Before
     public void setup() {
-        billbox = BankomatInstans.getInstans().getBillbox();
-        radbankirFacadur = BankomatInstans.getInstans().getRadbankirFacadur();
-        accountManager = BankomatInstans.getInstans().getAccountManager();
+        radbankirFacadur = BankomatInstans.getInstans();
         withdrawException = null;
         withdrawnAmount = 0;
         withdrawnBills = new ArrayList<>();
@@ -46,20 +36,15 @@ public class UttagSteps {
 
     @Givet("^att bankomaten är full$")
     public void attBankomatenÄrFull() throws Throwable {
-        billbox.deposit(Valuesur.HUNDRED, 100);
-        billbox.deposit(Valuesur.TWOHUNDRED, 100);
-        billbox.deposit(Valuesur.FIVEHUNDRED, 100);
-        billbox.deposit(Valuesur.THOUSAND, 100);
+        radbankirFacadur.loadBills(Valuesur.HUNDRED, 100);
+        radbankirFacadur.loadBills(Valuesur.TWOHUNDRED, 100);
+        radbankirFacadur.loadBills(Valuesur.FIVEHUNDRED, 100);
+        radbankirFacadur.loadBills(Valuesur.THOUSAND, 100);
     }
 
     @Givet("^att bankomaten är tom")
     public void attBankomatenÄrTom() throws Throwable {
-        billbox.empty();
-    }
-
-    @Givet("^att kunden med kontonummer ([-]*\\d+) har ([-]*\\d+)kr på kontot$")
-    public void att_kunden_med_kontonummer_har_kr_på_kontot(int kontonummer, int summa) throws Throwable {
-        accountManager.findAccountByAccountNumber(kontonummer).setBalance(summa);
+        radbankirFacadur.emptyBillTrays();
     }
 
     @När("^kunden tar ut ([-]*\\d+)kr$")

@@ -7,6 +7,9 @@
  */
 package se.caglabs.radbankir.service;
 
+import se.caglabs.radbankir.exception.AccountLockedException;
+import se.caglabs.radbankir.exception.AccountNotFoundException;
+import se.caglabs.radbankir.exception.LoginFailedException;
 import se.caglabs.radbankir.exception.RadbankirExceptionur;
 import se.caglabs.radbankir.model.Account;
 
@@ -24,7 +27,7 @@ public class AccountManager implements IAccountManager {
         accounts.put(9898989L, new Account("Helgi Skúlason", 9898989L, 9898, 10000L, 0));
         accounts.put(7654321L, new Account("Egill Ólafsson", 7654321L, 1234, 56000L, 0));
         accounts.put(1111111L, new Account("Flosi Ólafsson", 1111111L, 4321, 80000L, 0));
-        accounts.put(2222222L, new Account("Gotti Sigurdarson", 2222222L, 2323, 200000L, 0));
+        accounts.put(2222222L, new Account("Gotti Sigurdarson",2222222L , 2323, 200000L, 0));
         accounts.put(4242424L, new Account("Utvecklurs", 4242424L, 4242, 0L, 0));
     }
 
@@ -44,16 +47,25 @@ public class AccountManager implements IAccountManager {
     }
 
     @Override
-    public Account login(long accountNumber, int pinCode) throws RadbankirExceptionur {
-        Account account = findAccountByAccountNumber(accountNumber);
-        if( isAccountLocked(accountNumber)) {
-            throw new RadbankirExceptionur("Kontot är låst");
-        } else if (account.getPinCode() == pinCode) {
+    public Account login(long accountNumber, int pinCode) throws AccountNotFoundException, LoginFailedException, AccountLockedException {
+        try {
+            Account account = findAccountByAccountNumber(accountNumber);
+            if (isAccountLocked(accountNumber)) {
+                throw new AccountLockedException("Account locked");
+            }
+
+            if (account.getPinCode() != pinCode) {
+                account.setFailedAttempts(account.getFailedAttempts() + 1);
+                if (isAccountLocked(accountNumber)) {
+                    throw new AccountLockedException("Account locked");
+                }
+                throw new LoginFailedException("Wrong pin code");
+            }
+
             account.setFailedAttempts(0);
             return account;
-        } else {
-            account.setFailedAttempts(account.getFailedAttempts() + 1);
-            throw new RadbankirExceptionur("Felaktig pinkod användes");
+        } catch (RadbankirExceptionur e) {
+            throw new AccountNotFoundException("Account not found");
         }
     }
 
