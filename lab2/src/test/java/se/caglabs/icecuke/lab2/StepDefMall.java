@@ -4,7 +4,7 @@ import cucumber.api.java.*;
 import se.caglabs.radbankir.*;
 
 /**
- * Mall för step defs.
+ * Mall för step definitioner.
  */
 public class StepDefMall {
   private RadbankirFacadur radbankirFacadur;
