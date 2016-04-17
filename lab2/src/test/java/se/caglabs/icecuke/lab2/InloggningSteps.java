@@ -2,13 +2,10 @@ package se.caglabs.icecuke.lab2;
 
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
-import cucumber.api.java.sv.När;
-import cucumber.api.java.sv.Så;
-import org.junit.Assert;
-import se.caglabs.radbankir.RadbankirFacadur;
-import se.caglabs.radbankir.exception.AccountLockedException;
-import se.caglabs.radbankir.exception.AccountNotFoundException;
-import se.caglabs.radbankir.exception.LoginFailedException;
+import cucumber.api.java.sv.*;
+import org.junit.*;
+import se.caglabs.radbankir.*;
+import se.caglabs.radbankir.exception.*;
 
 public class InloggningSteps {
 

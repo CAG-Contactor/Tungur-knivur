@@ -2,18 +2,12 @@ package se.caglabs.icecuke.lab2;
 
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
-import cucumber.api.java.sv.Givet;
-import cucumber.api.java.sv.När;
-import cucumber.api.java.sv.Så;
-import org.junit.Assert;
-import se.caglabs.radbankir.RadbankirFacadur;
-import se.caglabs.radbankir.model.Valuesur;
-import se.caglabs.radbankir.service.IBillbox;
+import cucumber.api.java.sv.*;
+import org.junit.*;
+import se.caglabs.radbankir.*;
+import se.caglabs.radbankir.model.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class UnderhallSteps {
 

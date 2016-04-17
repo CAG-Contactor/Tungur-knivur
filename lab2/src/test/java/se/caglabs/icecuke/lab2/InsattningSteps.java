@@ -1,13 +1,11 @@
 package se.caglabs.icecuke.lab2;
 
-import cucumber.api.java.After;
-import cucumber.api.java.Before;
-import cucumber.api.java.sv.När;
-import se.caglabs.radbankir.RadbankirFacadur;
-import se.caglabs.radbankir.model.Valuesur;
+import cucumber.api.java.*;
+import cucumber.api.java.sv.*;
+import se.caglabs.radbankir.*;
+import se.caglabs.radbankir.model.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 
 public class InsattningSteps {

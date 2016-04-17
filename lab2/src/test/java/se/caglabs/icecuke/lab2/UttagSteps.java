@@ -1,22 +1,15 @@
 package se.caglabs.icecuke.lab2;
 
-import cucumber.api.DataTable;
+import cucumber.api.*;
 import cucumber.api.java.Before;
-import cucumber.api.java.sv.Givet;
-import cucumber.api.java.sv.När;
-import cucumber.api.java.sv.Så;
-import org.junit.Assert;
+import cucumber.api.java.sv.*;
+import org.junit.*;
 import se.caglabs.radbankir.*;
-import se.caglabs.radbankir.exception.RadbankirExceptionur;
-import se.caglabs.radbankir.model.Valuesur;
-import se.caglabs.radbankir.service.IAccountManager;
-import se.caglabs.radbankir.service.IBillbox;
+import se.caglabs.radbankir.exception.*;
+import se.caglabs.radbankir.model.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.*;
+import java.util.stream.*;
 
 public class UttagSteps {
 
