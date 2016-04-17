@@ -1,7 +1,6 @@
 # language: sv
 Egenskap: kunder ska kunna sätta in pengar
 
-
   Bakgrund: det finns lite pengar i bankomaten
     Givet att bankomaten är tom
     Givet att teknikern fyllt på med 50 100-kronorssedlar

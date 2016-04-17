@@ -1,6 +1,6 @@
 package se.caglabs.icecuke.lab1;
 
-import java.util.Arrays;
+import java.util.*;
 
 public class Calculator {
 

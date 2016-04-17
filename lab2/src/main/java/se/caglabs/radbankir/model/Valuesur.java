@@ -1,6 +1,6 @@
 package se.caglabs.radbankir.model;
 
-import java.util.Arrays;
+import java.util.*;
 
 /**
  * An enum defining all bill values

@@ -1,7 +1,6 @@
 # language: sv
 Egenskap: tekniker ska kunna sköta underhållet av bankomaten
 
-
   Scenario: Fylla på med fack med 100-kronorssedlar
     Givet att bankomaten är tom
     Givet att teknikern fyllt på med 20 100-kronorssedlar

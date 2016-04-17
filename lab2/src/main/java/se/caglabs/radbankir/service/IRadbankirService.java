@@ -1,12 +1,9 @@
 package se.caglabs.radbankir.service;
 
-import se.caglabs.radbankir.exception.AccountLockedException;
-import se.caglabs.radbankir.exception.AccountNotFoundException;
-import se.caglabs.radbankir.exception.LoginFailedException;
-import se.caglabs.radbankir.exception.RadbankirExceptionur;
-import se.caglabs.radbankir.model.Valuesur;
+import se.caglabs.radbankir.exception.*;
+import se.caglabs.radbankir.model.*;
 
-import java.util.List;
+import java.util.*;
 
 /**
  * An interface that describes all operations available for an ATM customer

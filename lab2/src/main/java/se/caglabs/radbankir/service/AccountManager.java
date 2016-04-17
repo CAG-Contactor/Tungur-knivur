@@ -7,14 +7,10 @@
  */
 package se.caglabs.radbankir.service;
 
-import se.caglabs.radbankir.exception.AccountLockedException;
-import se.caglabs.radbankir.exception.AccountNotFoundException;
-import se.caglabs.radbankir.exception.LoginFailedException;
-import se.caglabs.radbankir.exception.RadbankirExceptionur;
-import se.caglabs.radbankir.model.Account;
+import se.caglabs.radbankir.exception.*;
+import se.caglabs.radbankir.model.*;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class AccountManager implements IAccountManager {
     private static final int MAX_NUMBER_OF_FAILED_LOGINS = 3;

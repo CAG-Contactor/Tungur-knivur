@@ -1,10 +1,7 @@
 package se.caglabs.icecuke.lab2;
 
-import se.caglabs.radbankir.RadbankirFacadur;
-import se.caglabs.radbankir.service.AccountManager;
-import se.caglabs.radbankir.service.Billbox;
-import se.caglabs.radbankir.service.IAccountManager;
-import se.caglabs.radbankir.service.IBillbox;
+import se.caglabs.radbankir.*;
+import se.caglabs.radbankir.service.*;
 
 public class BankomatInstans {
 
