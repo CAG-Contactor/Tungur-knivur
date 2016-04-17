@@ -1,7 +1,6 @@
 package se.caglabs.radbankir.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.*;
 
 @Data
 @AllArgsConstructor
