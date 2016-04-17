@@ -1,6 +1,7 @@
 # language: sv
 Egenskap: kunder ska kunna ta ut pengar
 
+
   Scenario: som kund ska jag bara få tre försök att mata in pinkod
     När kunden med kontonummer 7654321 loggar in med fel pinkod
     Så får kunden ett felmeddelande att försöka igen
